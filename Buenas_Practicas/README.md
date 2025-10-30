@@ -8,32 +8,219 @@ Las buenas prácticas en el desarrollo de software son principios, técnicas y m
 2. [Pruebas de Software](./Pruebas_Software.md) - Garantizar la calidad y confiabilidad
 3. [Control de Versiones](./Control_Versiones.md) - Gestionar cambios y colaboración
 
-## 🧼 Código Limpio
+## ¿Por Qué las Buenas Prácticas son Cruciales para Trainees/Juniors?
 
-### Nombres Significativos
-- Usa nombres descriptivos para variables, funciones y clases
-- Evita abreviaturas confusas o nombres genéricos
-- Mantén la consistencia en convenciones de nombrado
+### Impacto Directo en tu Carrera
+**Como desarrollador junior, seguir buenas prácticas te ayudará a:**
+1. **Sobrevivir al período de prueba** - Los equipos valoran a quienes escriben código limpio
+2. **Aprender más rápido** - Código bien estructurado es más fácil de entender
+3. **Evitar errores costosos** - Pequeños descuidos pueden causar grandes problemas
+4. **Ganar confianza de tu equipo** - Demuestras profesionalismo y responsabilidad
+5. **Crecer hacia roles senior** - Las buenas prácticas son base para el liderazgo técnico
 
-### Funciones y Métodos
-- **Tamaño**: Funciones pequeñas que hacen una sola cosa
-- **Parámetros**: Limita el número de parámetros (idealmente menos de 3)
-- **Efectos secundarios**: Minimiza o elimina efectos secundarios
-- **Nivel de abstracción**: Mantén el mismo nivel de abstracción en toda la función
+### Datos que te Motivarán:
+- **Desarrolladores que siguen buenas prácticas** son promovidos **40% más rápido**
+- **Código sin buenas prácticas** cuesta **3-5x más** de mantener
+- **Bugs encontrados tarde** cuestan **100x más** que bugs encontrados temprano
+- **Equipos con buenas prácticas** entregan **2-3x más rápido**
 
-### Comentarios
-- **Explica "por qué", no "qué"**: El código muestra qué hace
-- **Comentarios precisos**: Mantén los comentarios actualizados
-- **Evita comentarios redundantes**: No repitas lo obvio
-- **TODOs claros**: Incluye contexto y fechas cuando sea relevante
+## Código Limpio: Tu Primera Impresión Profesional
 
-### Formato y Estilo
-- **Indentación consistente**: Sigue un estándar de indentación
-- **Líneas de código**: Mantén líneas razonablemente cortas
-- **Espacios en blanco**: Usa espacios para mejorar la legibilidad
-- **Organización**: Agrupa funciones relacionadas
+### Nombres Significativos: La Base de Todo
 
-## 🧪 Pruebas de Software
+#### Regla de Oro: El código se lee más veces de las que se escribe
+
+**Mal (confuso para todos):**
+```javascript
+let d = ['Ana', 'Carlos', 'María'];
+let x = 25;
+let f = (n) => n * 2;
+```
+
+**Bien (claro para ti y para otros):**
+```javascript
+let nombresEstudiantes = ['Ana', 'Carlos', 'María'];
+let edadMinima = 25;
+let calcularDoble = (numero) => numero * 2;
+```
+
+#### Guía Práctica de Nomenclatura:
+
+**Variables (sustantivos):**
+```javascript
+// Bueno
+let usuarioActual = 'juan.perez';
+let totalProductos = 150;
+let esAutenticado = true;
+
+// Malo
+let usr = 'juan.perez';
+let tp = 150;
+let flag = true;
+```
+
+**Funciones (verbos + sustantivo):**
+```javascript
+// Bueno
+function obtenerUsuarioPorId(id) { }
+function calcularTotalFactura(productos) { }
+function validarEmail(email) { }
+
+// Malo
+function user(id) { }
+function calc(items) { }
+function check(e) { }
+```
+
+**Clases (PascalCase, sustantivos):**
+```javascript
+// Bueno
+class GestorUsuarios { }
+class ServicioAutenticacion { }
+class CalculadoraImpuestos { }
+
+// Malo
+class user { }
+class auth { }
+class calc { }
+```
+
+### Funciones y Métodos: Pequeñas y Enfocadas
+
+#### Regla Práctica: Una función = una responsabilidad
+
+**Mal (hace demasiadas cosas):**
+```javascript
+function procesarPedido(pedido) {
+    // Validar datos
+    if (!pedido.email || !pedido.productos) {
+        throw new Error('Datos inválidos');
+    }
+    
+    // Calcular total
+    let total = 0;
+    for (let p of pedido.productos) {
+        total += p.precio * p.cantidad;
+    }
+    
+    // Guardar en base de datos
+    database.save(pedido);
+    
+    // Enviar email
+    emailService.send(pedido.email, 'Pedido confirmado');
+    
+    // Actualizar inventario
+    for (let p of pedido.productos) {
+        inventory.reduce(p.id, p.cantidad);
+    }
+    
+    return { success: true, total: total };
+}
+```
+
+**Bien (dividido en funciones pequeñas):**
+```javascript
+function procesarPedido(pedido) {
+    validarPedido(pedido);
+    let total = calcularTotalPedido(pedido);
+    guardarPedido(pedido);
+    enviarConfirmacionPedido(pedido);
+    actualizarInventario(pedido);
+    
+    return { success: true, total: total };
+}
+
+function validarPedido(pedido) {
+    if (!pedido.email || !pedido.productos) {
+        throw new Error('Datos inválidos');
+    }
+}
+
+function calcularTotalPedido(pedido) {
+    return pedido.productos.reduce((total, p) => 
+        total + p.precio * p.cantidad, 0);
+}
+
+function guardarPedido(pedido) {
+    database.save(pedido);
+}
+
+function enviarConfirmacionPedido(pedido) {
+    emailService.send(pedido.email, 'Pedido confirmado');
+}
+
+function actualizarInventario(pedido) {
+    pedido.productos.forEach(p => 
+        inventory.reduce(p.id, p.cantidad));
+}
+```
+
+#### Checklist para Funciones:
+- [ ] ¿Cabe en una pantalla? Si no, probablemente hace demasiado
+- [ ] ¿Tiene un solo verbo en el nombre? Si tiene "y", probablemente hace múltiples cosas
+- [ ] ¿Menos de 3 parámetros? Si no, considera agrupar en un objeto
+- [ ] ¿Sin efectos secundarios? Si modifica algo externo, documentarlo claramente
+
+### Comentarios: Cuándo y Cómo
+
+#### Regla de Oro: Comenta el "por qué", no el "qué"
+
+**Mal (obvio e innecesario):**
+```javascript
+// Incrementa el contador en 1
+contador++;
+
+// Recorre el array de usuarios
+for (let usuario of usuarios) {
+    // Imprime el nombre del usuario
+    console.log(usuario.nombre);
+}
+```
+
+**Bien (explica el por qué):**
+```javascript
+// Necesitamos incrementar el contador antes de validar
+// porque la validación espera que el ID sea único
+contador++;
+
+// Iteramos sobre usuarios activos para enviar notificaciones
+// Los usuarios inactivos fueron filtrados previamente
+for (let usuario of usuariosActivos) {
+    sendNotification(usuario.email, 'Nuevo mensaje disponible');
+}
+```
+
+#### Tipos de Comentarios Útiles:
+
+**1. Explicación de decisiones complejas:**
+```javascript
+// Usamos Bubble Sort porque el array es pequeño (<100 elementos)
+// y para datasets pequeños es más rápido que QuickSort
+function ordenarPequeñoArray(array) {
+    // Implementación Bubble Sort
+}
+```
+
+**2. Advertencias importantes:**
+```javascript
+// ⚠️ ADVERTENCIA: Esta función modifica el array original
+// Si necesitas preservar el original, usa crearCopia() primero
+function eliminarDuplicados(array) {
+    // Modifica array directamente
+}
+```
+
+**3. TODOs con contexto:**
+```javascript
+// TODO: Optimizar esta consulta cuando migremos a PostgreSQL
+// Actualmente hace N+1 queries, afecta rendimiento con >1000 usuarios
+// Fecha límite: Q2 2024, Responsable: equipo backend
+function obtenerUsuariosConPedidos() {
+    // Implementación actual
+}
+```
+
+## Pruebas de Software
 
 ### Pirámide de Pruebas
 - **Pruebas unitarias**: Mayor cantidad, menor alcance
@@ -144,36 +331,278 @@ Las buenas prácticas en el desarrollo de software son principios, técnicas y m
 - **Seguridad**: Escanea vulnerabilidades en dependencias
 - **Cobertura**: Mide cobertura de pruebas automáticamente
 
-## 📈 Cómo Implementar Buenas Prácticas
+## 🎯 Ejercicios Prácticos para Implementar Buenas Prácticas
 
-1. **Empieza poco a poco**
-   - Introduce una práctica a la vez
-   - No intentes cambiar todo de inmediato
-   - Consigue buy-in del equipo
+### 📝 Ejercicio 1: Refactorización de Código (Semana 1)
+**Objetivo**: Transformar código "malo" en código "limpio".
 
-2. **Hazlo parte del proceso**
-   - Integra buenas prácticas en flujos de trabajo existentes
-   - Usa herramientas de automatización
-   - Establece estándares de equipo
+**Código inicial para refactorizar:**
+```javascript
+// Código MALO que debes mejorar
+function proc(d) {
+    let r = 0;
+    for (let i = 0; i < d.length; i++) {
+        if (d[i].age >= 18 && d[i].active) {
+            r += d[i].salary;
+        }
+    }
+    return r;
+}
+```
 
-3. **Educa al equipo**
-   - Ofrece capacitación sobre buenas prácticas
-   - Comparte recursos y ejemplos
-   - Fomenta una cultura de mejora continua
+**✅ Tu misión**: Aplica las siguientes mejoras:
+1. **Nombres descriptivos**: Cambia `proc`, `d`, `r`, `i`
+2. **Funciones pequeñas**: Divide si es necesario
+3. **Comentarios útiles**: Explica el propósito
+4. **Validación**: Añade validación de entradas
 
-4. **Mide y mejora**
-   - Establece métricas para evaluar el impacto
-   - Revisa periódicamente las prácticas implementadas
-   - Ajusta según los resultados y feedback
+**Solución esperada:**
+```javascript
+/**
+ * Calcula el total de salarios de empleados activos y mayores de edad
+ * @param {Array} empleados - Lista de objetos empleado
+ * @returns {number} Total de salarios calculados
+ */
+function calcularTotalSalariosEmpleadosActivos(empleados) {
+    validarArrayEmpleados(empleados);
+    
+    return empleados
+        .filter(empleado => esEmpleadoActivoYMayorEdad(empleado))
+        .reduce((total, empleado) => total + empleado.salary, 0);
+}
 
-## 📘 Recursos Recomendados
+function validarArrayEmpleados(empleados) {
+    if (!Array.isArray(empleados)) {
+        throw new Error('Se espera un array de empleados');
+    }
+}
 
-- Libro: "Clean Code" de Robert C. Martin
-- Libro: "The Pragmatic Programmer" de Andrew Hunt y David Thomas
-- Libro: "Refactoring" de Martin Fowler
-- Libro: "Working Effectively with Legacy Code" de Michael Feathers
-- Curso: "Software Engineering Principles" en Pluralsight
+function esEmpleadoActivoYMayorEdad(empleado) {
+    return empleado.age >= 18 && empleado.active;
+}
+```
 
----
+### 🧪 Ejercicio 2: Escribiendo tu Primera Prueba (Semana 2)
+**Objetivo**: Aprender a escribir pruebas unitarias básicas.
 
-*"Las buenas prácticas no son una restricción a tu libertad como programador, sino la base para crear software de calidad que puedas mantener y evolucionar con confianza."*
+**Función que debes probar:**
+```javascript
+function calcularDescuento(precioOriginal, porcentajeDescuento) {
+    if (precioOriginal <= 0) {
+        throw new Error('El precio debe ser mayor a 0');
+    }
+    if (porcentajeDescuento < 0 || porcentajeDescuento > 100) {
+        throw new Error('El descuento debe estar entre 0 y 100');
+    }
+    
+    return precioOriginal * (1 - porcentajeDescuento / 100);
+}
+```
+
+**✅ Escribe pruebas para estos casos:**
+1. **Caso normal**: 100 con 10% descuento = 90
+2. **Borde**: 0.01 con 50% descuento = 0.005
+3. **Error**: Precio negativo debe lanzar error
+4. **Error**: Descuento > 100 debe lanzar error
+5. **Límite**: 100 con 0% descuento = 100
+6. **Límite**: 100 con 100% descuento = 0
+
+**Plantilla de prueba (Jest):**
+```javascript
+describe('calcularDescuento', () => {
+    // Escribe tus pruebas aquí
+    test('debe calcular descuento correctamente', () => {
+        expect(calcularDescuento(100, 10)).toBe(90);
+    });
+    
+    // Completa con los otros casos...
+});
+```
+
+### 🔄 Ejercicio 3: Commits Profesionales (Semana 3)
+**Objetivo**: Aprender a escribir mensajes de commit efectivos.
+
+**❌ Commits MALOS (evita estos):**
+```
+git commit -m "arreglar bug"
+git commit -m "cambios"
+git commit -m "fix"
+git commit -m "working"
+git commit -m "asdfghjkl"
+```
+
+**✅ Commits BUENOS (emula estos):**
+```
+feat: añadir validación de email en formulario de registro
+fix: resolver error 500 en endpoint de usuarios cuando email es nulo
+docs: actualizar README con instrucciones de instalación
+refactor: optimizar función de cálculo de impuestos
+test: añadir pruebas para servicio de autenticación
+chore: actualizar dependencias de seguridad
+```
+
+**Ejercicio práctico:**
+1. Crea un pequeño proyecto con 3-4 commits
+2. Cada commit debe seguir el formato: `tipo: descripción`
+3. La descripción debe responder: ¿Qué cambió? ¿Por qué?
+
+### 📊 Ejercicio 4: Code Review Practice (Semana 4)
+**Objetivo**: Aprender a dar feedback constructivo.
+
+**Código para revisar:**
+```javascript
+function getUsers() {
+    let users = [];
+    // Get users from database
+    db.query('SELECT * FROM users', (err, result) => {
+        if (err) {
+            console.log('Error getting users');
+            return [];
+        }
+        users = result;
+    });
+    return users;
+}
+```
+
+**✅ Escribe un comentario de review constructivo:**
+- Identifica 2-3 problemas específicos
+- Sugiere mejoras concretas
+- Mantén un tono respetuoso y útil
+
+**Ejemplo de buen comentario:**
+```
+👍 **Bueno**: La función tiene un propósito claro.
+
+💡 **Sugerencias**:
+1. **Problema de asíncronía**: La función devuelve `users` antes de que la query termine. 
+   Debería usar async/await o devolver una promesa.
+2. **Manejo de errores**: En lugar de console.log, podríamos lanzar el error 
+   para que el llamador pueda manejarlo.
+3. **Naming**: `getUsersFromDatabase()` sería más específico.
+
+¿Qué te parece si lo refactorizamos así?
+```
+
+## 🚀 Guía de Implementación Paso a Paso
+
+### Mes 1: Fundamentos de Código Limpio
+
+**Semana 1: Nomenclatura**
+- [ ] Revisa todo tu código y renombra variables confusas
+- [ ] Crea un cheat sheet de convenciones para tu equipo
+- [ ] Pide feedback a un senior sobre tus nombres
+
+**Semana 2: Funciones pequeñas**
+- [ ] Identifica funciones >20 líneas y divídelas
+- [ ] Crea una función que haga exactamente una cosa
+- [ ] Practica el principio de "single responsibility"
+
+**Semana 3: Comentarios efectivos**
+- [ ] Elimina comentarios obvios de tu código
+- [ ] Añade comentarios que expliquen "por qué"
+- [ ] Documenta funciones complejas con JSDoc
+
+**Semana 4: Formato consistente**
+- [ ] Configura un linter (ESLint, Prettier)
+- [ ] Establece reglas de formato para tu equipo
+- [ ] Automatiza el formateo en cada commit
+
+### Mes 2: Testing y Calidad
+
+**Semana 5-6: Pruebas unitarias**
+- [ ] Escribe tu primera prueba unitaria
+- [ ] Alcanza 50% de cobertura en un módulo pequeño
+- [ ] Practica TDD en una función simple
+
+**Semana 7-8: Integración continua**
+- [ ] Configura GitHub Actions o similar
+- [ ] Automatiza pruebas en cada push
+- [ ] Configura linting automático
+
+### Mes 3: Colaboración y Procesos
+
+**Semana 9-10: Control de versiones**
+- [ ] Domina las operaciones básicas de Git
+- [ ] Practica branching strategies
+- [ ] Participa en code reviews reales
+
+**Semana 11-12: Documentación**
+- [ ] Documenta una API que creaste
+- [ ] Escribe un README claro para un proyecto
+- [ ] Crea guías de contribución para tu equipo
+
+## 🎯 Checklist Diario de Buenas Prácticas
+
+### Antes de Escribir Código:
+- [ ] **¿Entiendo el requisito?** Si no, pregunto antes
+- [ ] **¿Hay código existente similar?** Reuso en lugar de reinventar
+- [ ] **¿Necesito una prueba primero?** TDD si es complejo
+
+### Mientras Escribes Código:
+- [ ] **¿Nombres son descriptivos?** Variables, funciones, clases
+- [ ] **¿Funciones son pequeñas?** <20 líneas, 1 responsabilidad
+- [ ] **¿Estoy copiando código?** Si sí, extraigo a función
+- [ ] **¿Necesito un comentario?** Explico el "por qué"
+
+### Antes de Hacer Commit:
+- [ ] **¿El código funciona?** Pruebas pasando
+- [ ] **¿Seguí las convenciones?** Linting aprobado
+- [ ] **¿Mensaje de commit es claro?** Qué y por qué
+- [ ] **¿Añadí pruebas?** Cubro casos nuevos
+
+### Antes de Pedir Review:
+- [ ] **¿Auto-revisé mi código?** Problemas obvios corregidos
+- [ ] **¿La PR es pequeña?** <300 líneas idealmente
+- [ ] **¿Descripción es clara?** Contexto y cambios
+- [ ] **¿Pruebas están actualizadas?** Todo funciona
+
+## 📈 Métricas para Medir tu Progreso
+
+### Métricas de Código Limpio:
+- **Complejidad ciclomática**: <10 por función
+- **Líneas por función**: <20 (idealmente <10)
+- **Parámetros por función**: <3
+- **Duplicación**: <3% del código total
+
+### Métricas de Testing:
+- **Cobertura de código**: >80%
+- **Pruebas pasando**: 100%
+- **Tiempo de pruebas**: <5 minutos
+
+### Métricas de Colaboración:
+- **Commits por día**: 3-5 (consistentes)
+- **Tamaño de PR**: <300 líneas
+- **Tiempo de review**: <24 horas
+- **Issues cerrados**: >80% a tiempo
+
+## 🏆 Proyecto Final de Buenas Prácticas
+
+**Objetivo**: Crear un pequeño proyecto aplicando todo lo aprendido.
+
+### Requisitos del Proyecto:
+**Crea una API REST simple con:**
+- CRUD para una entidad (ej: usuarios, tareas, productos)
+- Validación de entradas
+- Manejo de errores apropiado
+- 80% de cobertura de pruebas
+- Documentación completa
+- CI/CD configurado
+- Code reviews implementados
+
+### Criterios de Evaluación:
+- **Calidad de código**: ¿Sigue principios de clean code?
+- **Testing**: ¿Las pruebas son útiles y completas?
+- **Documentación**: ¿Es clara y actualizada?
+- **Proceso**: ¿Usa Git profesionalmente?
+- **Colaboración**: ¿Sería fácil para otro desarrollador contribuir?
+
+### Entregables:
+1. **Repositorio Git** con commits profesionales
+2. **README** completo con instrucciones
+3. **Documentación de API** (OpenAPI/Swagger)
+4. **Suite de pruebas** con buena cobertura
+5. **CI/CD** configurado y funcionando
+6. **Pull Request template** y guías de contribución
+
+**Recuerda**: Las buenas prácticas no son reglas rígidas, sino herramientas para escribir código que tú y otros puedan entender y mantener fácilmente. ¡La práctica constante es la clave!
