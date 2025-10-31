@@ -2,7 +2,7 @@
 
 ¡Bienvenido a tu guía completa sobre los fundamentos esenciales del desarrollo de software!
 
-Como mencionaba el tweet que viste: *"No te obsesiones con aprender lenguajes y frameworks. Céntrate en: Resolución de problemas, Fundamentos de programación, Diseño de software, Soft skills y Buenas prácticas. Los lenguajes son solo herramientas. Estas habilidades son las que te llevarán al siguiente nivel!"*
+*"No te obsesiones con aprender lenguajes y frameworks. Céntrate en: Resolución de problemas, Fundamentos de programación, Diseño de software, Soft skills y Buenas prácticas. Los lenguajes son solo herramientas. Estas habilidades son las que te llevarán al siguiente nivel!"*
 
 Esta guía está estructurada en cinco pilares fundamentales que todo desarrollador debe dominar para tener éxito en su carrera. A diferencia de los tutoriales específicos de lenguajes o frameworks, aquí nos enfocamos en las habilidades transferibles que permanecen relevantes sin importar la tecnología que uses.
 
